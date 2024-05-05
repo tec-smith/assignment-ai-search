@@ -1,0 +1,35 @@
+{
+  "name": "assignment-ai-search",
+  "version": "1.0.7",
+  "keywords": [
+    "Artificial Intelligence",
+    "Contextual Suggestions",
+    "Free-Form Text Search",
+    "Natural Language Processing",
+    "Query Analysis",
+    "Google Vertex AI"
+  ],
+  "author": "Thomas EC. Smith",
+  "license": "ISC",
+  "repository": "https://github.com/tec-smith/assignment-ai-search",
+  "homepage": "https://tecsmith.uk/",
+  "bugs": "https://github.com/tec-smith/assignment-ai-search/issues",
+  "description": "An advanced search query analysis and correction suggestions agent.",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev:frontend": "cd client && npm dev",
+    "dev:backend": "cd server && npm dev",
+    "start": "concurrently \"npm run start:frontend\" \"npm run start:backend\"",
+    "start:frontend": "cd client && npm start",
+    "start:backend": "cd server && npm start",
+    "build": "concurrently \"npm run build:frontend\" \"npm run build:backend\"",
+    "build:frontend": "cd client && npm run build",
+    "build:backend": "cd server && npm run build",
+    "test": "concurrently \"npm run test:frontend\" \"npm run test:backend\"",
+    "test:frontend": "cd client && npm run test",
+    "test:backend": "cd server && npm run test"
+  },
+  "dependencies": {
+    "concurrently": "^7.6.0"
+  }
+}

@@ -1,0 +1,31 @@
+.feedback-container {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.example-icon {
+  color: blue;
+  font-size: x-small;
+  margin-right: 5px;
+}
+
+.failure-icon {
+  color: red;
+  font-size: x-small;
+  margin-right: 5px;
+}
+
+.feedback-text {
+  display: inline;
+  font-size: small;
+  font-style: italic;
+}
+
+.success-icon {
+  color: green;
+  font-size: x-small;
+  margin-right: 5px;
+}

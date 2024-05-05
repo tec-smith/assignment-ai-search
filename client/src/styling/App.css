@@ -1,0 +1,25 @@
+.App {
+  background-color: azure;
+  height: 100vh;
+  width: 100vw;
+}
+
+.header-container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  min-width: 200px;
+  padding-top: 12vh;
+  width: 70%;
+}
+
+.search-bar-container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  min-width: 200px;
+  padding-top: 6vh;
+  width: 70%;
+}

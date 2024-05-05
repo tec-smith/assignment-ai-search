@@ -1,0 +1,101 @@
+#search-icon {
+  color: green;
+}
+
+.input-container {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+}
+
+.input-container input {
+  width: 100%;
+  padding-right: 30px;
+}
+
+.input-wrapper {
+  align-items: center;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0px 0px 7px gray;
+  display: flex;
+  height: 2.5rem;
+  padding: 0 15px;
+  width: 100%;
+}
+
+.search-form {
+  background-color: transparent;
+  border: none;
+  font-size: 1.25rem;
+  height: 100%;
+  margin-left: 7px;
+  width: 100%;
+}
+
+button {
+  background-color: white;
+  border: none;
+  border-radius: 10px;
+  color: black;
+  cursor: pointer;
+  font-size: 1rem;
+  height: 2.5rem;
+  margin-left: 7px;
+  width: 10%;
+  z-index: 1;
+}
+
+button:disabled {
+  color: whitesmoke;
+}
+
+button:hover {
+  color: black;
+  font-weight: bold;
+}
+
+input {
+  background-color: transparent;
+  border: none;
+  font-size: 1.25rem;
+  height: 100%;
+  margin-left: 7px;
+  width: 100%;
+}
+
+input:disabled {
+  background-color: transparent;
+}
+
+input:focus {
+  outline: none;
+}
+
+option {
+  color: black;
+}
+
+option:disabled {
+  color: whitesmoke;
+}
+
+select {
+  background-color: transparent;
+  border: none;
+  font-size: medium;
+  margin-left: 7px;
+  outline: none;
+}
+
+select:disabled {
+  background-color: transparent;
+}
+
+select:focus {
+  outline: none;
+}
+
+select:hover {
+  cursor: pointer;
+}
