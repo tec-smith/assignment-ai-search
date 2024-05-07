@@ -1,7 +1,7 @@
 {
   "name": "assignment-ai-search-client",
   "private": true,
-  "version": "1.0.4",
+  "version": "1.0.8",
   "type": "module",
   "scripts": {
     "dev": "vite",

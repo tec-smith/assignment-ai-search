@@ -1,17 +1,14 @@
 import fs from 'fs';
 import path from 'path';
 
+import { writeOptions } from '../../../@types';
+
 /**
  * Writes the response from the API to a local file.
  *
  * @param modelId The ID of the model to write the response for.
  * @param response The response from the API.
  */
-
-interface writeOptions {
-  modelId: string;
-  response: any;
-}
 
 export default async function write({ modelId, response }: writeOptions) {
   const outputDir = path.join(__dirname, "../../output");

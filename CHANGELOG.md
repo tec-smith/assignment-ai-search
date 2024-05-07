@@ -1,5 +1,11 @@
 Version history and release logs are listed below in descending order;
 
+### 2024.05.07 | v.1.0.8:
+ * Consolidated types for the sake of my sanity and improved readability.
+ * Updated geoCoordinates to give back a real two letter country code.
+ * Fixed input validation on the frontend inline with parseInput and schema.
+ * Updated .gitignore to include project locations in one file and not three!
+
 ### 2024.05.03 | v.1.0.7:
  * Removed unused project imports, packages and variables.
  * Cleaned up source code to improve readability and maintainability.

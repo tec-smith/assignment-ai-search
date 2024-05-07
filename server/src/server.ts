@@ -1,8 +1,9 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
+import { Coordinates, InterpretedInfo } from "../../@types";
 import { inputInterpreter } from './utils/inputInterpreter';
-import { parseInterpretedInfoFromText, InterpretedInfo } from './utils/parseInterpretedInfo';
-import { geoCoordinates, Coordinates } from './utils/geoCoordinates';
+import { parseInterpretedInfoFromText } from './utils/parseInterpretedInfo';
+import { geoCoordinates } from './utils/geoCoordinates';
 
 // Initialize Express app.
 const app = express();
@@ -37,7 +38,7 @@ app.post('/api/interpret', async (req: Request<any, any, { searchValue: string }
       // Ensure the response is a plain object.
       const response = {
         city: interpretedInfo.city,
-        country_code: interpretedInfo.country_code,
+        country_code: coordinates.country_code,
         check_in: interpretedInfo.check_in,
         check_out: interpretedInfo.check_out,
         latitude: coordinates.latitude,

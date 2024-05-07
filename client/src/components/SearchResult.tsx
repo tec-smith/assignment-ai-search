@@ -1,20 +1,8 @@
 import React from 'react';
 
+import { SearchResultProps } from '../../../@types';
+
 import '../styling/Interpreted.css';
-
-interface InterpretedResponse {
-  city?: string;
-  country_code?: string;
-  check_in?: string;
-  check_out?: string;
-  num_of_rooms?: string;
-  latitude?: number;
-  longitude?: number;
-}
-
-interface SearchResultProps {
-  searchResult: InterpretedResponse;
-}
 
 const SearchResult: React.FC<SearchResultProps> = ({ searchResult }) => {
   return (

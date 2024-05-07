@@ -1,35 +1,24 @@
-import React, { useEffect, useState, useTransition } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
 
+import {
+  InterpretedResponse,
+  ParsedInput,
+  SearchBarProps,
+} from '../../../@types';
 import { BookingInputSchema, BookingServiceSchema } from '../schemas';
 import { ExampleFeedback } from '../components/feedback/ExampleFeedback';
 import { FailureFeedback } from '../components/feedback/FailureFeedback';
 import { SuccessFeedback } from '../components/feedback/SuccessFeedback';
-import { parseInput } from '../utils/parseInput';
 import { setServiceType } from '../utils/setServiceType';
 import SearchResult from './SearchResult';
 import SuggestionList from './suggestion/SuggestionList';
 
 import '../styling/SearchBar.css';
 
-interface InterpretedResponse {
-  city?: string;
-  country_code?: string;
-  check_in?: string;
-  check_out?: string;
-  num_of_rooms?: string;
-  latitude?: number;
-  longitude?: number;
-}
-
-interface SearchBarProps {
-  handleQuery: (query: string) => void;
-}
-
 const cCHotels = 'https://test.citycity.se/api/v2/hotel/city';
 
 const SearchBar: React.FC<SearchBarProps> = ({ handleQuery }) => {
-  // State variables for form submission.
   const [example, setExample] = useState<string | undefined>('');
   const [failure, setFailure] = useState<string | undefined>('');
   const [isPending, setIsPending] = useState(false);
@@ -42,14 +31,14 @@ const SearchBar: React.FC<SearchBarProps> = ({ handleQuery }) => {
   const [suggestions, setSuggestions] = useState<string[]>([]);
 
   useEffect(() => {
-    if (failure) {
+    if (example) {
       const timeout = setTimeout(() => {
-        setFailure(undefined);
+        setExample(undefined);
       }, 10000);
 
       return () => clearTimeout(timeout);
     }
-  }, [failure]);
+  }, [example]);
 
   // Fetch location suggestions based on the initial input value.
   const fetchSuggestions = async (value: string) => {
@@ -93,61 +82,68 @@ const SearchBar: React.FC<SearchBarProps> = ({ handleQuery }) => {
     setSearchValue('');
   };
 
-const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-  event.preventDefault();
-  setIsPending(true);
+  const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsPending(true);
 
-  // Uncomment and use input validation logic if needed
-  // const parsedData = BookingInputSchema.parse(parseInput(searchValue));
-  // if (!parsedData) {
-  //   setExample(
-  //     'e.g. "Stockholm, Sverige from 28th to 29th of March for one person".'
-  //   );
-  //   return;
-  // }
+    try {
+      // Input validation logic.
+      // const parsedData: ParsedInput = BookingInputSchema.parse(searchValue);
+      // if (!parsedData) {
+      //   setExample(
+      //     'e.g. "Stockholm, Sverige from 28th to 29th of March for one person".'
+      //   );
+      //   return;
+      // }
 
-  try {
+      // Send the user input to the backend for interpretation.
+      const response = await fetch('http://localhost:3001/api/interpret', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ searchValue }),
+      });
 
-    // Send the user input to the backend for interpretation.
-    const response = await fetch('http://localhost:3001/api/interpret', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ searchValue }),
-    });
+      // Check if the response is successful (status code 200-299).
+      if (!response.ok) {
+        throw new Error('Failed to interpret input.');
+      }
 
-    // Check if the response is successful (status code 200-299)
-    if (!response.ok) {
-      throw new Error('Failed to interpret input');
+      // Parse the JSON response.
+      const interpretedInfo: InterpretedResponse = await response.json();
+      setResponseData(interpretedInfo);
+
+      // Construct the redirect URL using responseData.
+      const { country_code, latitude, longitude, check_in, check_out } =
+        interpretedInfo;
+      const url = `https://test.citycity.se/hotels/search/${country_code}/${latitude}/${longitude}/${check_in}/${check_out}/1/1`;
+
+      // Set the redirectUrl state with the constructed URL.
+      setRedirectUrl(url);
+
+      // Redirect to the constructed URL after waiting (15 seconds delay).
+      setTimeout(() => {
+        window.location.href = url;
+      }, 15000);
+
+      // Reset the form.
+      handleFormReset();
+    } catch (error) {
+      if (error) {
+        // Handle validation error.
+        console.error('Input validation error:', error.errors);
+        setFailure(error.message);
+      } else {
+        // Handle unexpected errors (e.g., network issues, unexpected behavior).
+        console.error('An interpreting error occurred:', error);
+        setFailure(error.message);
+      }
+    } finally {
+      // Set isPending back to false regardless of success or failure.
+      setIsPending(false);
     }
-
-    // Parse the JSON response.
-    const interpretedInfo: InterpretedResponse = await response.json();
-    setResponseData(interpretedInfo);
-
-    // Construct the redirect URL using responseData.
-    const { country_code, latitude, longitude, check_in, check_out } = interpretedInfo;
-    const url = `https://test.citycity.se/hotels/search/${country_code}/${latitude}/${longitude}/${check_in}/${check_out}/1/1`;
-
-    // Set the redirectUrl state with the constructed URL.
-    setRedirectUrl(url);
-
-    // Redirect to the constructed URL after waiting (10 seconds delay).
-    setTimeout(() => {
-      window.location.href = url;
-    }, 10000);
-
-    // Reset the form.
-    handleFormReset();
-  } catch (error) {
-    console.error('Error interpreting input:', error);
-  } finally {
-    // Set isPending back to false regardless of success or failure.
-    setIsPending(false);
-  }
-};
-
+  };
 
   // Handle input change.
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -265,7 +261,7 @@ const handleFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
       {/* Redirect message */}
       {redirectUrl && (
         <p style={{ marginTop: '1rem', fontSize: '1.2rem', color: 'red' }}>
-          You will be redirected to the search page in ten seconds...
+          You will be redirected to the search page in fifteen seconds...
         </p>
       )}
       {/* Search result */}

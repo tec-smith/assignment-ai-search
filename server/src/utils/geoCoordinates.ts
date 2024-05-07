@@ -1,7 +1,4 @@
-interface Coordinates {
-  latitude: number | null;
-  longitude: number | null;
-}
+import { Coordinates } from '../../../@types';
 
 export const geoCoordinates = async (mapLocation: string, gMapsKey: string): Promise<Coordinates> => {
   try {
@@ -13,19 +10,26 @@ export const geoCoordinates = async (mapLocation: string, gMapsKey: string): Pro
     const data = await response.json();
 
     if (data.results && data.results.length > 0) {
-      const { lat, lng } = data.results[0].geometry.location;
+      const result = data.results[0];
+      const { lat, lng } = result.geometry.location;
 
-      return { latitude: lat, longitude: lng };
+      let countryCode = null;
+      for (const component of result.address_components) {
+        if (component.types.includes('country')) {
+          countryCode = component.short_name;
+          break;
+        }
+      }
+
+      return { latitude: lat, longitude: lng, country_code: countryCode };
     } else {
-      return { latitude: null, longitude: null }; // Handle error case
+      return { latitude: null, longitude: null, country_code: null };
     }
   } catch (error) {
     console.error('Error fetching coordinates:', error);
-    return { latitude: null, longitude: null }; // Handle error case
+    return { latitude: null, longitude: null, country_code: null };
   }
 };
-
-export { Coordinates }; // Export the Coordinates interface.
 
 /***
   @COPYRIGHT (c) 2024. Thomas EC. Smith (https://www.TECSmith.uk). All rights reserved.

@@ -10,13 +10,13 @@ import {
 } from '@google-cloud/vertexai';
 import { parseInterpretedInfoFromText } from './parseInterpretedInfo';
 
-// Initialise Vertex AI with your Cloud project and location
+// Initialise Vertex AI with your Cloud project and location.
 const model = process.env.AIMODEL_IDENTITY || 'gemini-1.0-pro-001';
 const projectId = process.env.PROJECT_IDENTITY || '';
 const region = process.env.PROJECT_LOCATION || 'us-central1';
 const vertexAI = new VertexAI({ project: projectId, location: region });
 
-// Define an array of safety settings with explicit typing
+// Define an array of safety settings with explicit typing.
 const safetySettings: SafetySetting[] = [
   { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
   { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
@@ -36,7 +36,7 @@ async function processStream(stream: AsyncIterable<GenerateContentResponse>): Pr
     if (item.candidates && item.candidates.length > 0 && item.candidates[0].content) {
       const content = item.candidates[0].content as Content;
 
-      // Iterate over each part in the content
+      // Iterate over each part in the content.
       for (const part of content.parts) {
         if ('text' in part && typeof (part as TextPart).text === 'string') {
           const textPart = part as TextPart;
@@ -46,7 +46,7 @@ async function processStream(stream: AsyncIterable<GenerateContentResponse>): Pr
     }
   }
 
-  // Join all text parts into a single string
+  // Join all text parts into a single string.
   const accumulatedText = textParts.join('');
 
   return accumulatedText;
@@ -59,7 +59,7 @@ async function processStream(stream: AsyncIterable<GenerateContentResponse>): Pr
  * @throws Error if input interpretation or content generation fails.
  */
 export async function inputInterpreter(userInput: string): Promise<string> {
-  // Describe the context of the prompt for the model
+  // Describe the context of the prompt for the model.
   const hotelPrompt = 'Extract the city, two-letter country code, check-in and check-out dates (including present year 2024 in the format YYYY-MM-DD), as well as the number of people from the following sentence, and then return it in a JSON format with the following variables filled in: city, country_code, check_in, check_out, num_of_rooms.';
 
   try {
@@ -67,6 +67,7 @@ export async function inputInterpreter(userInput: string): Promise<string> {
       contents: [{ role: 'user', parts: [{ text: hotelPrompt + userInput }] }],
     };
 
+    // Generate content using the model.
     const generativeModel = vertexAI.preview.getGenerativeModel({
       model: model,
       generationConfig: {
@@ -81,7 +82,8 @@ export async function inputInterpreter(userInput: string): Promise<string> {
     const accumulatedText = await processStream(streamingResp.stream);
     const parsedInfo = parseInterpretedInfoFromText(accumulatedText);
 
-    console.log('Model Response:', parsedInfo);
+    // Log the model response.
+    console.log(parsedInfo);
 
     return JSON.stringify(parsedInfo);
   } catch (error) {
@@ -89,3 +91,7 @@ export async function inputInterpreter(userInput: string): Promise<string> {
     throw new Error('Failed to interpret input.');
   }
 }
+
+/***
+  @COPYRIGHT (c) 2024. Thomas EC. Smith (https://www.TECSmith.uk). All rights reserved.
+****/

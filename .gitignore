@@ -1,1 +1,25 @@
-/node_modules
+# assignment-ai-search
+
+# Dependencies
+/client/node_modules
+/server/node_modules
+node_modules
+
+# Environments
+/client/.env
+/server/.env
+
+# Misc
+.DS_Store
+/server/keyfile.json
+npm-debug.log*
+
+# Production
+/client/dist
+/server/dist
+
+# Testing
+/coverage
+
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
